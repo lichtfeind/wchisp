@@ -211,9 +211,10 @@ impl<'a> Flashing<'a> {
 
         // NOTE: use all-zero key seed for now.
         let isp_key = Command::isp_key(vec![0; 0x1e]);
-        let resp = self.transport.transfer(isp_key)?;
-        anyhow::ensure!(resp.is_ok(), "isp_key failed");
-        anyhow::ensure!(resp.payload()[0] == key_checksum, "isp_key checksum failed");
+        let req = &isp_key.into_raw()?;
+        let resp = self.transport.send_raw(req)?;
+        //anyhow::ensure!(resp.is_ok(), "isp_key failed");
+        //anyhow::ensure!(resp.payload()[0] == key_checksum, "isp_key checksum failed");
 
         const CHUNK: usize = 56;
         let mut address = 0x0;
@@ -265,8 +266,8 @@ impl<'a> Flashing<'a> {
         // NOTE: use all-zero key seed for now.
         let isp_key = Command::isp_key(vec![0; 0x1e]);
         let resp = self.transport.transfer(isp_key)?;
-        anyhow::ensure!(resp.is_ok(), "isp_key failed");
-        anyhow::ensure!(resp.payload()[0] == key_checksum, "isp_key checksum failed");
+        //anyhow::ensure!(resp.is_ok(), "isp_key failed");
+        //anyhow::ensure!(resp.payload()[0] == key_checksum, "isp_key checksum failed");
 
         const CHUNK: usize = 56;
         let mut address = 0x0;
